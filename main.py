@@ -250,6 +250,6 @@ class Game:
 g1 = Game(3, 5)
 g1.play_game()
 
-# notes
+# issues
 # print players winnings after quit
 # option to quit game after player press n for bet
