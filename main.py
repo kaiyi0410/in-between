@@ -127,6 +127,12 @@ class Game:
         w = w.format(player, outcome, winnings, total_winnings)
         print(w)
 
+    def player_winnings(self):
+        for i in range(len(self.players)):
+            p = "{} winnings: {}"
+            p = p.format(self.players[i].name, self.players[i].winnings)
+            print(p)
+
     def play_game(self):
         print("\n***GAME START***")
 
@@ -164,6 +170,8 @@ class Game:
             # input player response
             response = input("q to quit, s to shuffle, any key to play:\n")
             if response == 'q':
+                print("\n***GAME END***")
+                self.player_winnings()
                 break
             if response == 's':
                 self.deck = Deck()
@@ -243,8 +251,6 @@ class Game:
 
             # print pool money
             print(f"***Pool money: {self.pool.value}***\n")
-
-        print("***GAME END***")
 
 
 g1 = Game(3, 5)
