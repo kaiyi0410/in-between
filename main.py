@@ -50,17 +50,37 @@ class Card:
 
 
 class Deck:
-    def __init__(self):
+    def __init__(self, n=1):
         self.cards = []
+        self.n = n
         for i in range(4):
             for j in range(1, 14):
                 self.cards.append(Card(i, j))
         shuffle(self.cards)
+        if n == 1:
+            pass
+        elif n == 2:
+            self.cards.extend(self.cards)
+            shuffle(self.cards)
+        else:
+            raise TypeError("Invalid argument. Expecting 1 or 2.")
 
     def rm_card(self):
         if len(self.cards) == 0:
             return
         return self.cards.pop()
+
+    def reset(self):
+        self.cards = []
+        for i in range(4):
+            for j in range(1, 14):
+                self.cards.append(Card(i, j))
+        shuffle(self.cards)
+        if self.n == 1:
+            pass
+        elif self.n == 2:
+            self.cards.extend(self.cards)
+            shuffle(self.cards)
 
 
 class Player:
@@ -85,7 +105,6 @@ class Game:
         self.max_players = max_players
         self.min_bet = min_bet
         self.players = []
-        self.condition = 'play'
 
         while True:
             n_players = get_integer_input(f"Number of players (max {max_players}):")
@@ -94,11 +113,16 @@ class Game:
             pass
         # initiate player names
         for i in range(n_players):
-            name = input("Player name: ")
-            self.players.append(Player(name))
+            while True:
+                name = input(f"Player {i+1} name: ")
+                if len(name) == 0:
+                    print("Player name can't be empty")
+                else:
+                    self.players.append(Player(name))
+                    break
 
         # initiate deck
-        self.deck = Deck()
+        self.deck = Deck(2)
 
         # initiate pool
         self.pool = Pool()
@@ -131,11 +155,10 @@ class Game:
         print("\n***GAME END***")
         for i in range(len(self.players)):
             self.players[i].winnings += self.pool.value / len(self.players)
-            self.pool.value = 0
             p = "{} winnings: {}"
             p = p.format(self.players[i].name, f"{self.players[i].winnings:.2f}")
             print(p)
-        self.condition = 'stop'
+        self.pool.value = 0
 
     def play_game(self):
         print("\n***GAME START***")
@@ -147,37 +170,28 @@ class Game:
         p = -1
 
         # loop while enough cards
-        while self.condition == 'play':
+        while True:
             # reset player turn to first player after last player
             if p == len(self.players):
                 p = 0
             else:
                 p += 1
 
-            # ask if players want to continue after deck finished
+            # reset deck when not enough
             if len(self.deck.cards) < 3:
-                while True:
-                    response = input("Deck finished, do you wish to reset? (y/n)\n")
-                    if response != 'y' or response != 'n':
-                        pass
-                    if response == 'y':
-                        # reset deck
-                        self.deck = Deck()
-                        print("[Deck Shuffled]")
-                        break
-                    if response == 'n':
-                        self.end_game()
+                self.deck.reset()
+                print("[Deck Shuffled]\n")
 
             # input player response
             response = input("q to quit, s to shuffle, any key to play:\n")
             if response == 'q':
                 self.end_game()
                 break
-            if response == 's':
-                self.deck = Deck()
+            elif response == 's':
+                self.deck.reset()
                 print("[Deck Shuffled]\n")
 
-            # check pool value
+            # refill pool if not enough
             if self.pool.value < (min_bet * len(self.players)):
                 self.pool.add_money(min_bet, len(self.players))
                 for i in range(len(self.players)):
@@ -213,7 +227,7 @@ class Game:
                 elif response == 'n':
                     # reset deck if not enough cards
                     if len(self.deck.cards) < 3:
-                        self.deck = Deck()
+                        self.deck .reset()
                         print("[Deck Shuffled]\n")
                     # change players
                     p += 1
@@ -223,7 +237,11 @@ class Game:
                     c_high = max(c1, c2)
                     c_low = min(c1, c2)
                 else:
-                    self.end_game()
+                    break
+
+            if response == 'q':
+                self.end_game()
+                break
 
             # place bet in pool
             while True:
@@ -257,6 +275,3 @@ class Game:
 
 g1 = Game(10, 5)
 g1.play_game()
-
-# issues
-# option for 2 decks
