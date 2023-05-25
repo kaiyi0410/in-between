@@ -84,8 +84,8 @@ class Game:
     def __init__(self, max_players, min_bet):
         self.max_players = max_players
         self.min_bet = min_bet
-        # initiate number of players
         self.players = []
+        self.condition = 'play'
 
         while True:
             n_players = get_integer_input(f"Number of players (max {max_players}):")
@@ -127,11 +127,15 @@ class Game:
         w = w.format(player, outcome, winnings, total_winnings)
         print(w)
 
-    def player_winnings(self):
+    def end_game(self):
+        print("\n***GAME END***")
         for i in range(len(self.players)):
+            self.players[i].winnings += self.pool.value / len(self.players)
+            self.pool.value = 0
             p = "{} winnings: {}"
-            p = p.format(self.players[i].name, self.players[i].winnings)
+            p = p.format(self.players[i].name, f"{self.players[i].winnings:.2f}")
             print(p)
+        self.condition = 'stop'
 
     def play_game(self):
         print("\n***GAME START***")
@@ -143,7 +147,7 @@ class Game:
         p = -1
 
         # loop while enough cards
-        while True:
+        while self.condition == 'play':
             # reset player turn to first player after last player
             if p == len(self.players):
                 p = 0
@@ -159,24 +163,19 @@ class Game:
                     if response == 'y':
                         # reset deck
                         self.deck = Deck()
+                        print("[Deck Shuffled]")
                         break
                     if response == 'n':
-                        break
-
-            # break and quit if deck is not reset after finished
-            if len(self.deck.cards) < 3:
-                break
+                        self.end_game()
 
             # input player response
             response = input("q to quit, s to shuffle, any key to play:\n")
             if response == 'q':
-                print("\n***GAME END***")
-                self.player_winnings()
+                self.end_game()
                 break
             if response == 's':
                 self.deck = Deck()
-                print("Deck shuffled")
-                print("Cards left: ", len(self.deck.cards))
+                print("[Deck Shuffled]\n")
 
             # check pool value
             if self.pool.value < (min_bet * len(self.players)):
@@ -206,15 +205,16 @@ class Game:
                 print(f"Pool money: {self.pool.value}\n")
 
                 # get player response on bet
-                response = input("Do you want to bet? (y/n)\n")
-                if response != 'y' or response != 'n':
+                response = input("Do you want to bet? (y/n) Press q to quit.\n")
+                if response not in ['y', 'n', 'q']:
                     pass
-                if response == 'y':
+                elif response == 'y':
                     break
-                if response == 'n':
+                elif response == 'n':
                     # reset deck if not enough cards
                     if len(self.deck.cards) < 3:
                         self.deck = Deck()
+                        print("[Deck Shuffled]\n")
                     # change players
                     p += 1
                     # draw cards
@@ -222,6 +222,8 @@ class Game:
                     c2 = self.deck.rm_card()
                     c_high = max(c1, c2)
                     c_low = min(c1, c2)
+                else:
+                    self.end_game()
 
             # place bet in pool
             while True:
@@ -253,8 +255,8 @@ class Game:
             print(f"***Pool money: {self.pool.value}***\n")
 
 
-g1 = Game(3, 5)
+g1 = Game(10, 5)
 g1.play_game()
 
 # issues
-# option to quit game after player press n for bet
+# option for 2 decks
