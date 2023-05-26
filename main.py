@@ -128,13 +128,14 @@ class Game:
         # initiate pool
         self.pool = Pool()
 
-    # announce cards drawn by players
+    # announce high and low cards drawn by players
     @staticmethod
     def draw(pn, c_high, c_low):
         s = "***Player: {}***\nHigh card: {}\nLow card: {}"
         s = s.format(pn, c_high, c_low)
         print(s)
 
+    # announce card drawn by players
     @staticmethod
     def player_draw(pn, pc):
         s = "{} drew {}"
