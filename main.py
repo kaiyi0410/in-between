@@ -240,14 +240,10 @@ class Game:
                         self.deck .reset()
                         print("[Deck Shuffled]\n")
                     else:
-                        while True:
-                            s = input("Shuffle deck (s)? Any key to continue.\n")
-                            if s == 's':
-                                self.deck.reset()
-                                print("[Deck Shuffled]\n")
-                                break
-                            else:
-                                break
+                        s = input("Shuffle deck (s)? Any key to continue.\n")
+                        if s == 's':
+                            self.deck.reset()
+                            print("[Deck Shuffled]\n")
 
                     # change players
                     p += 1
