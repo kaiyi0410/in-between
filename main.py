@@ -238,6 +238,15 @@ class Game:
                     if len(self.deck.cards) < 3:
                         self.deck .reset()
                         print("[Deck Shuffled]\n")
+                    else:
+                        while True:
+                            s = input("Shuffle deck (s)? Any key to continue.\n")
+                            if s == 's':
+                                self.deck.reset()
+                                print("[Deck Shuffled]\n")
+                            else:
+                                break
+
                     # change players
                     p += 1
                     # draw cards
