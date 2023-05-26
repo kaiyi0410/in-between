@@ -234,6 +234,7 @@ class Game:
                     print(s)
                     self.players[p].winnings -= self.penalty
                     self.pool.value += self.penalty
+
                     # reset deck if not enough cards
                     if len(self.deck.cards) < 3:
                         self.deck .reset()
@@ -244,6 +245,7 @@ class Game:
                             if s == 's':
                                 self.deck.reset()
                                 print("[Deck Shuffled]\n")
+                                break
                             else:
                                 break
 
