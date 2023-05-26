@@ -101,9 +101,10 @@ class Pool:
 
 
 class Game:
-    def __init__(self, max_players, min_bet):
+    def __init__(self, max_players, min_bet, penalty):
         self.max_players = max_players
         self.min_bet = min_bet
+        self.penalty = penalty
         self.players = []
 
         while True:
@@ -130,9 +131,9 @@ class Game:
     # announce cards drawn by players
     @staticmethod
     def draw(pn, c_high, c_low):
-        d = "***Player: {}***\nHigh card: {}\nLow card: {}"
-        d = d.format(pn, c_high, c_low)
-        print(d)
+        s = "***Player: {}***\nHigh card: {}\nLow card: {}"
+        s = s.format(pn, c_high, c_low)
+        print(s)
 
     @staticmethod
     def player_draw(pn, pc):
@@ -147,17 +148,17 @@ class Game:
             outcome = "won"
         else:
             outcome = "lost"
-        w = "***{} {} {} this round***\n***Total winnings: {}***"
-        w = w.format(player, outcome, winnings, total_winnings)
-        print(w)
+        s = "***{} {} {} this round***\n***Total winnings: {}***"
+        s = s.format(player, outcome, winnings, total_winnings)
+        print(s)
 
     def end_game(self):
         print("\n***GAME END***")
         for i in range(len(self.players)):
             self.players[i].winnings += self.pool.value / len(self.players)
-            p = "{} winnings: {}"
-            p = p.format(self.players[i].name, f"{self.players[i].winnings:.2f}")
-            print(p)
+            s = "{} winnings: {}"
+            s = s.format(self.players[i].name, f"{self.players[i].winnings:.2f}")
+            print(s)
         self.pool.value = 0
 
     def play_game(self):
@@ -219,12 +220,19 @@ class Game:
                 print(f"Pool money: {self.pool.value}\n")
 
                 # get player response on bet
-                response = input("Do you want to bet? (y/n) Press q to quit.\n")
-                if response not in ['y', 'n', 'q']:
+                response = input(f"Bet (enter) or pass (p, penalty: {self.penalty}). Press q to quit.\n")
+                if response not in ['', 'p', 'q']:
+                    print("Invalid input")
                     pass
-                elif response == 'y':
+                elif response == '':
                     break
-                elif response == 'n':
+                elif response == 'p':
+                    # incur penalty
+                    s = "{} passed. Penalty: {}\n"
+                    s = s.format(self.players[p].name, self.penalty)
+                    print(s)
+                    self.players[p].winnings -= self.penalty
+                    self.pool.value += self.penalty
                     # reset deck if not enough cards
                     if len(self.deck.cards) < 3:
                         self.deck .reset()
@@ -273,5 +281,5 @@ class Game:
             print(f"***Pool money: {self.pool.value}***\n")
 
 
-g1 = Game(10, 5)
+g1 = Game(10, 5, 2)
 g1.play_game()
