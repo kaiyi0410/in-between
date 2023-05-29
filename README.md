@@ -12,13 +12,16 @@ Every players will chip in an initial amount of money to the pool. The pool beco
 
 STEP 2
 
-Deal two cards to the first player. 
+The first player will be dealt two cards.
 
 STEP 3
 
-The player now has to decide if the next card will have a value that's in-between the two cards. An ace card has the smallest value (1) and a king has the largest (13). Suits don't matter. 
-The player is allowed to bet as much as the total amount of money in the pool. If the value of the third card is in-between the first two cards, then the player may retrieve the amount s/he betted from the pool. If not, said amount will be added to the pool – making it grow bigger for the next player.
-If the third card happens to be the same as either of the first two dealt, then double of the said bet is added into the pool instead.
+The player now has to decide if the next card dealt to them will have a value that's in-between the two previous cards. An ace card has the smallest value (1) and a king has the largest (13). Suits don't matter. 
+The player is allowed to bet as much as the total amount of money in the pool. 
+- If the value of the third card is in-between the first two cards, then the player may retrieve the amount s/he betted from the pool. 
+- If not, said amount will be added to the pool – making it grow bigger for the next player.
+- If the third card happens to be the same as either of the first two dealt, then double of the said bet is added into the pool instead.
+- If the player decides to pass, he/she will have to pay a penalty to the pool.
 
 STEP 4
 
